@@ -1,8 +1,10 @@
 const express = require('express');
+const path = require('path');
 const dotenv = require('dotenv');
 const PORT = process.env.PORT || 5000;
 const morgan = require('morgan');
 const colors = require('colors');
+const fileUpload = require('express-fileupload');
 const errorHandler = require('./middlware/error');
 const connectDB = require('./config/db');
 
@@ -12,6 +14,7 @@ connectDB();
 
 // Route files
 const bootcamps = require('./routes/bootcamps');
+const courses = require('./routes/courses');
 
 const app = express();
 
@@ -20,12 +23,19 @@ app.use(express.json());
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
+
+app.use(fileUpload());
+
+// set statuc folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 // combined, common, tiny and short
 // const logger = require('./middlware/logger');
 // app.use(logger);
 
 // Mount routes
 app.use('/api/v1/bootcamps', bootcamps);
+app.use('/api/v1/courses', courses);
 
 app.use(errorHandler);
 
