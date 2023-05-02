@@ -1,3 +1,5 @@
 node_modules/
 config/config.env
 notes.js
+.DS_Store
+config/db.js
